@@ -38,6 +38,9 @@ namespace AutoCAD_First_CSharp_plug_in
             Document doc = Application.DocumentManager.MdiActiveDocument;
             Database db = doc.Database;
 
+            //Elbow angle
+            double elbowAngle = 0;
+
             //Start transaction
             using(Transaction tr = db.TransactionManager.StartTransaction())
             {
@@ -60,10 +63,10 @@ namespace AutoCAD_First_CSharp_plug_in
                 Point3dCollection elbowLocationCollection = new Point3dCollection();    //Creates an array kind of object for collection of points
                 for(int i = 0; i < gibPolyine.NumberOfVertices; i++)
                 {
-                    if (i == 0)
-                    {
-                        continue;
-                    }
+                    //if (i == 0)
+                    //{
+                    //    continue;
+                    //}
                     Point3d tempElbowLocation = gibPolyine.GetPoint3dAt(i);
                     elbowLocationCollection.Add(tempElbowLocation);
                 }
@@ -102,17 +105,75 @@ namespace AutoCAD_First_CSharp_plug_in
 
 
                 ////insert block at each point with orientation
-                for (int j = 0; j < elbowLocationCollection.Count - 1; j++)
+                for (int j = 1; j < elbowLocationCollection.Count - 1; j++)
                 {
+                    Point3d previousVertex = elbowLocationCollection[j - 1];
                     Point3d currentVertex = elbowLocationCollection[j];
                     Point3d nextVertex = elbowLocationCollection[j + 1];
 
                     //set local block reference
                     BlockReference localEblowReference = new BlockReference(currentVertex, localElbowBlockReference.BlockTableRecord);
 
+                    double p1x = previousVertex.X, p1y = previousVertex.Y;
+                    double oX = currentVertex.X, oY = currentVertex.Y;
+                    double p2x = nextVertex.X, p2y = nextVertex.Y;
+                    //double subtractorX = 0, subtractorY = 0;
+
+                    //Find the qudrant
+                    p1x -= oX;
+                    p2x -= oX;
+                    p1y -= oY;
+                    p2y -= oY;
+                    //oX -= oX;
+                    //oY -= oY;
+                    if ((p1x > 0 && p2y > 0) || (p2x > 0 && p1y > 0))
+                    {
+                        elbowAngle = 0;
+                    }
+                    else if ((p1x < 0 && p2y > 0) || (p2x < 0 && p1y > 0))
+                    {
+                        elbowAngle = 90 * (Math.PI / 180);
+                    }
+                    else if ((p1x < 0 && p2y < 0) || (p2x < 0 && p1y < 0)) 
+                    {
+                        elbowAngle = 180 * (Math.PI / 180);
+                    }
+                    else if ((p1x > 0 && p2y < 0) || (p2x > 0 && p1y < 0))
+                    {
+                        elbowAngle = 270 * (Math.PI / 180);
+                    }
+                    doc.Editor.WriteMessage(elbowAngle.ToString());
+                    doc.Editor.WriteMessage("\n");
+
+                    //define direction vector
+                    //Vector3d elbowDirection = nextVertex - currentVertex;
+
                     //set block reference properties
                     localEblowReference.ScaleFactors = localElbowBlockReference.ScaleFactors;
-                    localEblowReference.Rotation = Vector3d.ZAxis.GetAngleTo(nextVertex - currentVertex, Vector3d.ZAxis);
+                    //localEblowReference.Rotation = Vector3d.ZAxis.GetAngleTo(nextVertex - currentVertex, Vector3d.ZAxis);
+                    //localEblowReference.Rotation = currentVertex.za.GetAngleTo(nextVertex - currentVertex, Vector3d.ZAxis);
+                    //localEblowReference.Rotation = elbowDirection.AngleOnPlane(Vector3d.ZAxis);
+                    //localEblowReference.Rotation = Vector3d.XAxis.GetAngleTo(nextVertex - currentVertex);
+                    //localEblowReference.Rotation = elbowDirection.GetAngleTo(nextVertex - currentVertex);
+                    //double elbowAngle = Vector3d.XAxis.GetAngleTo(nextVertex - currentVertex);
+
+                    localEblowReference.Rotation = elbowAngle;
+
+                    //if (elbowDirection.Y < 0) // Quadrant III or IV
+                    //{
+                    //    elbowAngle = 2 * Math.PI - elbowAngle;
+                    //}
+                    //else if (elbowDirection.X < 0) // Quadrant II
+                    //{
+                    //    elbowAngle += Math.PI;
+                    //}
+
+                    //// Convert the angle from radians to degrees
+                    //double angleDegrees = elbowAngle * (180.0 / Math.PI);
+
+                    //localEblowReference.Rotation = angleDegrees;
+
+                    //if(currentVertex.X<0&&)
 
 
                     //Add new block reference to drawing

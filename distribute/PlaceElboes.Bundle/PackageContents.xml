@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ApplicationPackage SchemaVersion="1.0" AutodeskProduct="AutoCAD" Name="T_Utility_Tools" Description="Automatically place elbows on GIBs" AppVersion="1.0.0" FriendlyVersion="1.0.0" ProductType="Application" SupportedLocales="Enu" AppNameSpace="appstore.exchange.autodesk.com" Author="Autodesk, Inc." ProductCode="{5295326D-DD33-4F0B-BE16-DC9BE085AB8D}" UpgradeCode="{4CF9C7D8-8742-4667-A236-2187072C9FED}" OnlineDocumentation="www.autodesk.com">
+  <CompanyDetails Name="Autodesk, Inc." Url="www.autodesk.com" Email="info@autodesk.com" />
+  <RuntimeRequirements OS="Win32|Win64" Platform="AutoCAD*" SeriesMin="R19.1" SeriesMax="R24.3" />
+  <Components Description="Windows parts">
+    <RuntimeRequirements OS="Win32|Win64" Platform="AutoCAD*" SeriesMin="R19.1" SeriesMax="R24.3" />
+    <ComponentEntry AppName="AcPerfMon" Version="1.3.12.0" ModuleName="./Windows/AcPerfMon.dll" AppDescription="AutoCAD Performance Monitoring Tool" LoadOnCommandInvocation="True">
+      <Commands GroupName="ADSK_PERFMON">
+        <Command Local="PMSTART" Global="PMSTART" />
+        <Command Local="PMSTOP" Global="PMSTOP" />
+        <Command Local="PMTOGGLE" Global="PMTOGGLE" />
+        <Command Local="PMTRACE" Global="PMTRACE" />
+      </Commands>
+    </ComponentEntry>
+  </Components>
+  <DisplayInAppManager>False</DisplayInAppManager>
+</ApplicationPackage>

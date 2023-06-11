@@ -30,8 +30,8 @@ namespace AutoCAD_First_CSharp_plug_in
 
         // Modal Command with localized name
 
-
-        [CommandMethod("PlaceElbow")]
+        //[CommandMethod()]
+        [CommandMethod("GIB_Group","PlaceElbow","PlaceElbow",CommandFlags.Modal)]
         public void PlaceElbow()
         {
             //Get document and database

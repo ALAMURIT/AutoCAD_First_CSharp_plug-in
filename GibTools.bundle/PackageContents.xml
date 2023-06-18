@@ -19,7 +19,8 @@
 		  ModuleName="./Contents/GibTools.dll"
 		  AppDescription="Helps create GIBs"
 		  LoadOnCommandInvocation="False"
-		  LoadOnAutoCADStartup="True">
+		  LoadOnAutoCADStartup="True"
+		  LoadOnRequest="True">
 			<Commands GroupName="GibToolsGroup">
 				<Command Global="TiGenerateGib" Local="TiGenerateGib" />
 			</Commands>
